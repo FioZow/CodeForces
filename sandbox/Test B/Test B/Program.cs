@@ -7,16 +7,16 @@ namespace Test_B
     {
         static void Main(string[] args)
         {
-            var testsCount = int.Parse(Console.ReadLine());
+            var testsCount = ushort.Parse(Console.ReadLine());
 
             for (int i = 0; i < testsCount; i++)
             {
-                var numbersCount = int.Parse(Console.ReadLine());
-                var numbers = Console.ReadLine().Split(" ").Select(it => int.Parse(it)).ToArray();
-                var pointer = new int[numbersCount];
+                var numbersCount = uint.Parse(Console.ReadLine());
+                var numbers = Console.ReadLine().Split(" ").Select(it => uint.Parse(it)).ToArray();
+                var pointer = new uint[numbersCount];
                 FillPointer(pointer);
-                var niceImportance = new int[numbersCount];
-                var nice = 1;
+                var niceImportance = new uint[numbersCount];
+                uint nice = 1;
 
                 Sort(numbers, pointer);
 
@@ -30,12 +30,19 @@ namespace Test_B
                         {
                             counter++;
                         }
-                        //дописать вариант когда вторые числа дублируются
                         else if (numbers[j - 1] == numbers[j] + 1)
                         {
-                            counter++;
+                            do
+                            {
+                                counter++;
+                                j++;
+                                if (j == numbersCount)
+                                    break;
+                            }
+                            while (numbers[j] == numbers[j - 1]);
                             break;
                         }
+                        else { break; }
                     }
 
                     for(int j = index; j < index + counter; j++)
@@ -54,7 +61,7 @@ namespace Test_B
             }
         }
 
-        private static void PrintArray(int[] numbers)
+        private static void PrintArray(uint[] numbers)
         {
             foreach(int i in numbers)
             {
@@ -63,7 +70,7 @@ namespace Test_B
             Console.WriteLine();
         }
 
-        public static void Sort(int[] array, int[] pointer)
+        public static void Sort(uint[] array, uint[] pointer)
         {
             var length = array.Length;
 
@@ -85,9 +92,9 @@ namespace Test_B
             }
         }
 
-        public static void FillPointer(int[] pointer)
+        public static void FillPointer(uint[] pointer)
         {
-            for(int i = 0; i < pointer.Length; i++)
+            for(uint i = 0; i < pointer.Length; i++)
             {
                 pointer[i] = i;
             }
