@@ -9,12 +9,11 @@ while (testsCount != 0)
     var coupeCount = int.Parse(inp[0]);
     var requestCount = int.Parse(inp[1]);
 
-    var vagon = new Vagon();
-    vagon.Coupes = new List<Coupe>();
+    var coupes = new List<Coupe>();
 
     for (int i = 1; i <= coupeCount * 2; i += 2)
     {
-        vagon.Coupes.Add(new Coupe(new List<Place> { new Place(i), new Place(i + 1) }, i));
+        coupes.Add(new Coupe(new List<Place> { new Place(i), new Place(i + 1) }, i));
     }
 
     for (int i = 0; i < requestCount; i++)
@@ -25,51 +24,52 @@ while (testsCount != 0)
 
         var requestPlaceNumber = input.Length > 1 ? int.Parse(input[1]) : 0;
 
+        var id = requestPlaceNumber % 2 == 0 ? requestPlaceNumber - 1 : requestPlaceNumber;
+        var coupe = coupes.FirstOrDefault(x => x.Id == id);
+        var index = requestPlaceNumber % 2 != 0 ? 0 : 1;
+
         switch (requestType)
         {
-
             case 1:
-                var id = requestPlaceNumber % 2 == 0 ? requestPlaceNumber - 1 : requestPlaceNumber;
-
-                var placeToBuy = vagon.Coupes.FirstOrDefault(x => x.Id == id).Places.FirstOrDefault(x => x.Number == requestPlaceNumber);
-
-                if (placeToBuy.IsFree)
+                if (coupe.Places[index].IsFree)
                 {
-                    placeToBuy.IsFree = false;
+                    var place = coupe.Places[index];
+                    place.IsFree = false;
+                    coupe.Places[index] = place;
                     Console.WriteLine("SUCCESS");
                 }
                 else
                 {
                     Console.WriteLine("FAIL");
                 }
-
                 break;
+
             case 2:
-                var id2 = requestPlaceNumber % 2 == 0 ? requestPlaceNumber - 1 : requestPlaceNumber;
-
-                var placeToFree = vagon.Coupes.FirstOrDefault(x => x.Id == id2).Places.FirstOrDefault(x => x.Number == requestPlaceNumber);
-
-                if (!placeToFree.IsFree)
+                if (!coupe.Places[index].IsFree)
                 {
-                    placeToFree.IsFree = true;
+                    var place = coupe.Places[index];
+                    place.IsFree = true;
+                    coupe.Places[index] = place;
                     Console.WriteLine("SUCCESS");
                 }
                 else
                 {
                     Console.WriteLine("FAIL");
                 }
-
                 break;
-            case 3:
-                var coupe = vagon.Coupes.FirstOrDefault(x => x.Places.Where(x => x.IsFree == true).Count() == 2);
 
-                if (coupe != null)
+            case 3:
+                var coupe3 = coupes.FirstOrDefault(x => x.Places.Where(x => x.IsFree == true).Count() == 2);
+
+                if (coupe3 != null)
                 {
-                    foreach (var item in coupe.Places)
+                    for (int j = 0; j < 2; j++)
                     {
-                        item.IsFree = false;
+                        var place = coupe3.Places[j];
+                        place.IsFree = false;
+                        coupe3.Places[j] = place;
                     }
-                    Console.WriteLine($"SUCCESS {coupe.Places[0].Number}-{coupe.Places[1].Number}");
+                    Console.WriteLine($"SUCCESS {coupe3.Places[0].Number}-{coupe3.Places[1].Number}");
                 }
                 else
                 {
@@ -80,11 +80,6 @@ while (testsCount != 0)
     }
 
     testsCount--;
-}
-
-public class Vagon
-{
-    public List<Coupe> Coupes { get; set; }
 }
 
 public class Coupe
@@ -99,7 +94,7 @@ public class Coupe
     }
 }
 
-public class Place
+public struct Place
 {
     public bool IsFree { get; set; } = true;
     public int Number { get; set; }
