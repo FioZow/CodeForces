@@ -12,7 +12,7 @@ while (testsCount != 0)
     var vagon = new Vagon();
     vagon.Coupes = new List<Coupe>();
 
-    for (int i = 1; i <= coupeCount; i += 2)
+    for (int i = 1; i <= coupeCount * 2; i += 2)
     {
         vagon.Coupes.Add(new Coupe(new List<Place> { new Place(i), new Place(i + 1) }, i));
     }
