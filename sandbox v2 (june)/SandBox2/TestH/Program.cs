@@ -1,4 +1,8 @@
-﻿var testsCount = int.Parse(Console.ReadLine());
+﻿Sample1.F();
+
+
+
+var testsCount = int.Parse(Console.ReadLine());
 
 while (testsCount != 0)
 {
@@ -72,4 +76,13 @@ public class Point
         IsVisited = false;
         IsShip = isShip;
     }
+}
+
+class Sample1
+{
+    public static void F()
+    {
+        i = 1;
+    }
+    static int i = 0;
 }
